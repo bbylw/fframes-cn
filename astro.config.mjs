@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 
@@ -10,7 +11,7 @@ export default defineConfig({
   // Served from a GitHub Pages custom domain, so the site lives at the root.
   site: 'https://fframes.ndjp.net',
   trailingSlash: 'ignore',
-  integrations: [react(), icon()],
+  integrations: [react(), icon(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },

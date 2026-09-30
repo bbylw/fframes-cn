@@ -33,8 +33,10 @@ export default function CopyCommand() {
 
   const copy = useCallback(async (button: HTMLButtonElement) => {
     clearTimeout(timer.current);
-    const source = button.closest('[data-copy-source]')?.querySelector('code');
-    const text = source?.textContent ?? '';
+    const root = button.closest('[data-copy-source]');
+    // Panels that render a decorative prompt expose the clean text on the
+    // wrapper; everything else falls back to the code element's own text.
+    const text = root?.getAttribute('data-copy-text') ?? root?.querySelector('code')?.textContent ?? '';
     if (!text) return;
     let next: State = 'copied';
     try {

@@ -10,8 +10,13 @@ interface Props {
 
 const { lines, copy = true, class: className = '' } = Astro.props;
 const rendered = lines.map((line) =>
-  line.startsWith('  ') ? line : `<span class="text-accent select-none">$ </span>${line.trimStart()}`
+  line.startsWith('  ')
+    ? line
+    : `<span class="text-accent select-none" aria-hidden="true">$ </span>${line.trimStart()}`
 );
+/** The prompt glyph is display only, so hand the plain commands to the copy
+    button instead of letting it read the markup back out of the DOM. */
+const copyText = lines.map((line) => line.trim()).join('\n');
 ---
 
 <div
@@ -21,6 +26,7 @@ const rendered = lines.map((line) =>
     className,
   ]}
   data-copy-source
+  data-copy-text={copyText}
 >
   {
     copy && (

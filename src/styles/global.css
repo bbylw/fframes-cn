@@ -20,7 +20,6 @@
   /* Interactive controls need a boundary that clears 3:1, not a hairline. */
   --control-line: rgb(13 13 13 / 0.47);
   --ghost: rgb(13 13 13 / 0.06);
-  --ghost-strong: rgb(13 13 13 / 0.1);
   --primary: #181818;
   --primary-fg: #ffffff;
   --primary-hover: #2d2d2d;
@@ -36,7 +35,6 @@
   --code: #181818;
   --code-fg: #ededed;
   --code-muted: #9a9a9a;
-  --code-line: rgb(255 255 255 / 0.12);
 
   --sheet-line: rgb(13 13 13 / 0.05);
   --sheet-line-outer: rgb(13 13 13 / 0.06);
@@ -44,7 +42,6 @@
   --grain-opacity: 0.06;
   --leak: 0.16;
   --wordmark: url('/brand/fframes-wordmark.svg');
-  --wordmark-fade: #e3e3e3;
   --gutter: 1.5rem;
   --max: 1280px;
 }
@@ -60,7 +57,6 @@
   --line-soft: rgb(242 241 239 / 0.07);
   --control-line: rgb(242 241 239 / 0.4);
   --ghost: rgb(242 241 239 / 0.08);
-  --ghost-strong: rgb(242 241 239 / 0.14);
   --primary: #f2f1ef;
   --primary-fg: #131312;
   --primary-hover: #ffffff;
@@ -73,7 +69,6 @@
   --code: #1e1e1c;
   --code-fg: #ededed;
   --code-muted: #9d9b96;
-  --code-line: rgb(255 255 255 / 0.14);
 
   --sheet-line: rgb(242 241 239 / 0.045);
   --sheet-line-outer: rgb(242 241 239 / 0.055);
@@ -81,7 +76,6 @@
   --grain-opacity: 0.05;
   --leak: 0.2;
   --wordmark: url('/brand/fframes-wordmark-dark.svg');
-  --wordmark-fade: #4a4a48;
 }
 
 @media (min-width: 640px) {
@@ -107,7 +101,6 @@
   --color-line-soft: var(--line-soft);
   --color-control-line: var(--control-line);
   --color-ghost: var(--ghost);
-  --color-ghost-strong: var(--ghost-strong);
   --color-invert: var(--primary);
   --color-invert-fg: var(--primary-fg);
   --color-invert-hover: var(--primary-hover);
@@ -373,13 +366,6 @@
 
   .link:hover {
     color: var(--accent-ink);
-  }
-
-  .mono-label {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.02em;
-    color: var(--text-2);
   }
 
   /* Horizontally scrollable strips fade out instead of ending on a hard cut. */

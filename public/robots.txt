@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fframes.ndjp.net/sitemap-index.xml
