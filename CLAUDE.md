@@ -70,6 +70,31 @@ bun run check   # astro check, TypeScript strictest
 bun run build   # static output to dist/
 ```
 
+## Deployment
+
+Pushed to `github.com/bbylw/fframes-cn`, published by GitHub Pages at the custom
+domain **`https://fframes.ndjp.net`**.
+
+`.github/workflows/deploy.yml` builds with Bun on every push to `main`, runs
+`bun run check` before `bun run build`, then uploads `dist/` through
+`actions/deploy-pages`. Concurrency is `cancel-in-progress: false`, so a push is
+queued rather than left half published.
+
+Because the site sits on a custom domain it is served from the root, so `site` in
+`astro.config.mjs` has no `base`. `public/CNAME` carries the domain into the build
+output; changing the domain means editing that file, `astro.config.mjs`, and the
+Pages settings together, or the canonical and og:image URLs will disagree.
+
+Pages config is also part of the repo settings, not the code. To recreate it:
+
+```sh
+gh api --method POST repos/bbylw/fframes-cn/pages -f build_type=workflow
+gh api --method PUT  repos/bbylw/fframes-cn/pages -f cname=fframes.ndjp.net
+gh api --method PUT  repos/bbylw/fframes-cn/pages -F https_enforced=true
+```
+
+DNS is a `CNAME` to `bbylw.github.io`; it already resolves to the GitHub Pages IPs.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
