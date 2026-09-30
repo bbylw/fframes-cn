@@ -70,6 +70,47 @@ bun run check   # astro check, TypeScript strictest
 bun run build   # static output to dist/
 ```
 
+## Git identity — check before the first commit, not after
+
+This repo is **public**. Never let a private address reach a commit.
+
+Git has no "hide my email" switch: the address inside a commit is part of the data
+the commit hash covers, so it is immutable and readable by anyone through the public
+API. Setting *Keep my email addresses private* only affects commits created after
+that moment; it never rewrites existing ones.
+
+Before the first `git commit` in any public repo:
+
+```sh
+git config --local user.email "<id>+<login>@users.noreply.github.com"
+git config --local user.name "<login>"
+```
+
+Use `--local`, never `--global`, so other repositories keep their own identity.
+Get `<id>` from `gh api user --jq .id`. This repo already has it set to
+`30594873+bbylw@users.noreply.github.com`.
+
+Then, **before `git push`**, confirm the identity is the one you intend to publish:
+
+```sh
+git log --format='%h %an <%ae>'
+```
+
+If a private address is already pushed, the only fix is rewriting history, and it
+does not un-publish what was already public:
+
+```sh
+# one commit
+git commit --amend --reset-author --no-edit
+
+# whole history, e.g. via git-filter-repo --mailmap, then
+git push --force-with-lease        # never plain --force
+```
+
+Audit the tree and every blob in history for credentials before the first push too.
+`git rev-list --objects --all` plus `git cat-file -p` covers history, which the
+working tree alone does not.
+
 ## Deployment
 
 Pushed to `github.com/bbylw/fframes-cn`, published by GitHub Pages at the custom
