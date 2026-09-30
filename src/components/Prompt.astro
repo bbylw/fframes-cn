@@ -1,0 +1,34 @@
+---
+import CopyCommand from './islands/CopyCommand';
+
+interface Props {
+  /** Leading double space marks a continuation line, which gets no prompt. */
+  lines: readonly string[];
+  copy?: boolean;
+  class?: string;
+}
+
+const { lines, copy = true, class: className = '' } = Astro.props;
+const rendered = lines.map((line) =>
+  line.startsWith('  ') ? line : `<span class="text-accent select-none">$ </span>${line.trimStart()}`
+);
+---
+
+<div
+  class:list={[
+    'relative overflow-hidden rounded-panel border border-white/10 bg-code',
+    'shadow-[inset_0_1px_0_rgb(255_255_255/0.07)]',
+    className,
+  ]}
+  data-copy-source
+>
+  {
+    copy && (
+      <div class="absolute top-2 right-2 z-10">
+        <CopyCommand client:idle />
+      </div>
+    )
+  }
+  <pre
+    class="m-0 overflow-x-auto px-4 py-3.5 pr-14 text-[0.8125rem] leading-[1.75] text-code-fg"><code set:html={rendered.join('\n')} /></pre>
+</div>

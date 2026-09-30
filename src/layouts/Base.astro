@@ -1,0 +1,87 @@
+---
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.title, description = site.description } = Astro.props;
+
+// Scrapers and crawlers need absolute URLs, so resolve everything against the
+// configured site origin rather than emitting root relative paths.
+const origin = Astro.site ?? new URL('https://fframes.ndjp.net');
+const canonical = new URL(Astro.url.pathname, origin).href;
+const ogImage = new URL('/launch-poster.jpg', origin).href;
+---
+
+<!doctype html>
+<html lang={site.lang} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="720" />
+    <meta property="og:image:alt" content="fframes 发布视频的一帧" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="canonical" href={canonical} />
+    <script is:inline>
+      // Runs before first paint so the page never flashes the wrong theme.
+      (() => {
+        let stored = null;
+        try {
+          stored = localStorage.getItem('fframes-theme');
+        } catch {
+          stored = null;
+        }
+        const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = stored === 'dark' || stored === 'light' ? stored : system;
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="sheet" aria-hidden="true">
+      <div>
+        <svg aria-hidden="true">
+          <defs>
+            <pattern id="crop-4" x="-5" y="-5" width="25%" height="160" patternUnits="userSpaceOnUse">
+              <path d="M5 0v10M0 5h10" stroke="var(--crop-mark)" stroke-width="1" fill="none"></path>
+            </pattern>
+            <pattern id="crop-12" x="-5" y="-5" width="8.3333%" height="160" patternUnits="userSpaceOnUse">
+              <path d="M5 0v10M0 5h10" stroke="var(--crop-mark)" stroke-width="1" fill="none"></path>
+            </pattern>
+          </defs>
+          <rect class="hidden max-[899px]:block" width="100%" height="100%" fill="url(#crop-4)"></rect>
+          <rect class="hidden min-[900px]:block" width="100%" height="100%" fill="url(#crop-12)"></rect>
+        </svg>
+      </div>
+    </div>
+    <div class="leak" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

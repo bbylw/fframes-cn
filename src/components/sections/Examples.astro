@@ -1,0 +1,13 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import ExampleFilter from '../islands/ExampleFilter';
+---
+
+<Section id="examples">
+  <SectionHead
+    title="示例项目"
+    lead="仓库 examples/ 下的 15 个目录，每一个都是可以直接 cargo run 的完整项目。在仓库根目录用 just run 或 just render 就能打开或导出其中一个。"
+  />
+  <ExampleFilter client:visible />
+</Section>

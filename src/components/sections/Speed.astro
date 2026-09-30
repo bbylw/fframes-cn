@@ -1,0 +1,56 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { reasons, stats } from '../../data/site';
+---
+
+<Section id="speed">
+  <SectionHead
+    title="为什么这么快"
+    lead="GPU 负责绘制，静态标记在编译期被哈希，编码器直接链接，SVG 不够用时还有着色器可以插进来。"
+  />
+
+  <div class="mt-10 grid gap-10 md:mt-14 md:grid-cols-12 md:gap-12">
+    <ul class="min-w-0 md:col-span-7">
+      {
+        reasons.map((reason, index) => (
+          <li
+            class="reveal flex flex-col gap-2 border-t border-line py-5 first:border-t-0 first:pt-0"
+            style={`--d: ${index * 4}%`}
+          >
+            <h3 class="text-[19px] font-semibold tracking-[-0.018em]">{reason.title}</h3>
+            <p class="max-w-[54ch] text-[15px] leading-relaxed text-ink-2">
+              {
+                reason.body.map((part, index) =>
+                  index % 2 === 1 ? (
+                    <>
+                      {' '}
+                      <code class="font-mono text-[0.92em] text-ink">{part}</code>
+                    </>
+                  ) : (
+                    part
+                  )
+                )
+              }
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="reveal min-w-0 md:col-span-5" style="--d: 8%">
+      <dl class="grid grid-cols-2 gap-x-6 gap-y-7 rounded-card border border-line bg-surface-2 p-6 md:p-7">
+        {
+          stats.map((stat) => (
+            <div class="flex flex-col gap-1.5">
+              <dt class="order-2 text-[13.5px] leading-relaxed text-ink-2">{stat.label}</dt>
+              <dd class="order-1 font-mono text-[clamp(1.9rem,3.6vw,2.5rem)] leading-none tracking-[-0.045em] text-ink tabular-nums">
+                {stat.figure}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</Section>

@@ -1,0 +1,37 @@
+---
+import { Code } from 'astro:components';
+import type { CodeLanguage } from 'astro';
+import CopyCommand from './islands/CopyCommand';
+
+interface Props {
+  code: string;
+  lang: CodeLanguage;
+  /** Adds the copy affordance. Off for one-line commands, on for blocks. */
+  copy?: boolean;
+  /** Soft wrap instead of a horizontal scrollbar. */
+  wrap?: boolean;
+  class?: string;
+}
+
+const { code, lang, copy = true, wrap = true, class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'relative overflow-hidden rounded-panel border border-white/10 bg-code',
+    'shadow-[inset_0_1px_0_rgb(255_255_255/0.07)]',
+    className,
+  ]}
+  data-copy-source
+>
+  {
+    copy && (
+      <div class="absolute top-2 right-2 z-10">
+        <CopyCommand client:idle />
+      </div>
+    )
+  }
+  <div class="overflow-x-auto px-4 py-3.5 pr-14">
+    <Code code={code} lang={lang} theme="github-dark-default" wrap={wrap} />
+  </div>
+</div>

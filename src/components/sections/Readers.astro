@@ -1,0 +1,32 @@
+---
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { readers } from '../../data/site';
+
+const columns = [readers.agent, readers.human];
+---
+
+<Section id="readers">
+  <SectionHead title="为无法观看的作者而打造" lead={readers.intro} class="max-w-[68ch]" />
+
+  <div class="mt-10 grid gap-x-12 border-t border-line pt-8 md:mt-14 md:grid-cols-2">
+    {
+      columns.map((column, columnIndex) => (
+        <div
+          class:list={['reveal', columnIndex === 1 && 'md:border-l md:border-line md:pl-12']}
+          style={`--d: ${columnIndex * 6}%`}
+        >
+          <h3 class="text-xl font-semibold tracking-[-0.02em] md:text-[22px]">{column.heading}</h3>
+          <ul class="mt-6 flex flex-col gap-7">
+            {column.items.map((item) => (
+              <li>
+                <h4 class="text-[17px] font-semibold tracking-[-0.01em]">{item.title}</h4>
+                <p class="mt-2 max-w-[46ch] text-[15px] leading-relaxed text-ink-2">{item.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</Section>

@@ -1,0 +1,90 @@
+---
+import { Icon } from 'astro-icon/components';
+import ThemeToggle from './islands/ThemeToggle';
+import { nav, site } from '../data/site';
+---
+
+<header
+  class="sticky top-0 z-30 border-b border-line bg-surface/80 backdrop-blur-xl backdrop-saturate-150"
+>
+  <div class="wrap flex h-16 items-center justify-between gap-3">
+    <a href="#top" aria-label="fframes，回到顶部" class="shrink-0 rounded-tile p-1 -ml-1">
+      <img
+        src="/brand/fframes-wordmark.svg"
+        alt="fframes"
+        width="103"
+        height="26"
+        class="dark:hidden block h-[26px] w-auto"
+        loading="eager"
+        decoding="async"
+      />
+      <img
+        src="/brand/fframes-wordmark-dark.svg"
+        alt=""
+        width="103"
+        height="26"
+        class="hidden h-[26px] w-auto dark:block"
+        loading="eager"
+        decoding="async"
+      />
+    </a>
+
+    <nav aria-label="页面导航" class="hidden lg:block">
+      <ul class="flex items-center gap-0.5">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="block rounded-full px-3 py-1.5 text-[15px] text-ink-2 transition-colors duration-150 ease-out hover:bg-ghost hover:text-ink"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex shrink-0 items-center gap-1.5">
+      <ThemeToggle client:idle />
+      <a
+        href={site.repo}
+        target="_blank"
+        rel="noreferrer noopener"
+        class="hidden items-center gap-2 rounded-full bg-invert px-4 py-2 text-[15px] font-medium text-invert-fg transition-[background-color,transform] duration-150 ease-out hover:bg-invert-hover active:scale-[0.98] sm:inline-flex"
+      >
+        <Icon name="ph:github-logo" class="h-4 w-4" aria-hidden="true" />
+        GitHub
+      </a>
+      <a
+        href={site.repo}
+        target="_blank"
+        rel="noreferrer noopener"
+        aria-label="fframes 的 GitHub 仓库"
+        class="grid h-9 w-9 place-items-center rounded-full border border-control-line text-ink-2 transition-colors duration-150 ease-out hover:bg-ghost hover:text-ink sm:hidden"
+      >
+        <Icon name="ph:github-logo" class="h-4 w-4" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <nav aria-label="页面导航" class="wrap lg:hidden">
+    <ul
+      class="scroll-fade -mx-1 flex gap-1 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    >
+      {
+        nav.map((item) => (
+          <li class="shrink-0">
+            <a
+              href={item.href}
+              class="block rounded-full px-2.5 py-1 text-sm text-ink-2 transition-colors duration-150 ease-out hover:bg-ghost hover:text-ink"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>

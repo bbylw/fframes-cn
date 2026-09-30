@@ -1,0 +1,64 @@
+---
+import { Icon } from 'astro-icon/components';
+import Prompt from '../Prompt.astro';
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { skillDocs } from '../../data/site';
+---
+
+<Section id="agent">
+  <div class="grid gap-10 md:grid-cols-12 md:gap-12">
+    <div class="min-w-0 md:col-span-7">
+      <SectionHead
+        title="让 agent 帮你做视频"
+        lead="fframes 为编程 agent 附带了一个 skill。添加一次，然后像向动态设计师下 brief 一样，描述你想要的视频。"
+      >
+        <p class="mt-4 max-w-[62ch] text-base leading-relaxed text-ink-2 md:text-[17px]">
+          这个 skill 会带着你的 agent 从一个空文件夹走到渲染好的
+          {' '}<code class="rounded-tile bg-ghost px-1.5 py-0.5 font-mono text-[0.9em]">.mp4</code>：安装
+          fframes、创建项目、设计动效、置入声音，并在交给你之前检查结果。
+        </p>
+        <p class="mt-4 max-w-[62ch] text-base leading-relaxed text-ink-2 md:text-[17px]">
+          fframes 的 API 显式且详尽。编写显式、详尽的代码，正是一个配备了合适 skill 的 agent
+          擅长的事。skill 的指南是纯 Markdown，作为人类也很值得一读。
+        </p>
+      </SectionHead>
+    </div>
+
+    <div class="reveal min-w-0 md:col-span-5" style="--d: 8%">
+      <Prompt lines={['npx skills add https://fframes.studio']} class="md:mt-1" />
+      <dl class="mt-6 flex flex-col gap-4">
+        <div>
+          <dt class="font-mono text-[12.5px] tracking-[0.05em] text-ink-3">输入</dt>
+          <dd class="mt-1.5 text-[15px] leading-relaxed text-ink-2">
+            一段 brief。目标时长、画幅、节奏、要出现的文字。
+          </dd>
+        </div>
+        <div>
+          <dt class="font-mono text-[12.5px] tracking-[0.05em] text-ink-3">输出</dt>
+          <dd class="mt-1.5 text-[15px] leading-relaxed text-ink-2">
+            项目目录、渲染好的视频，以及一份它自己跑过的检查结果。
+          </dd>
+        </div>
+      </dl>
+
+      <ul class="mt-7 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-5">
+        {
+          skillDocs.map((doc) => (
+            <li>
+              <a
+                href={doc.href}
+                target="_blank"
+                rel="noreferrer noopener"
+                class="link inline-flex items-center gap-1 text-[15px]"
+              >
+                {doc.label}
+                <Icon name="ph:arrow-up-right" class="h-3 w-3 opacity-60" aria-hidden="true" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</Section>

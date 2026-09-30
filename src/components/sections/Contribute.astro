@@ -1,0 +1,42 @@
+---
+import { Icon } from 'astro-icon/components';
+import Prompt from '../Prompt.astro';
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { contributionSteps, site } from '../../data/site';
+---
+
+<Section id="contribute">
+  <div class="grid gap-10 md:grid-cols-12 md:gap-12">
+    <div class="min-w-0 md:col-span-5">
+      <SectionHead title="参与开发 fframes">
+        <p class="mt-4 max-w-[46ch] text-[15px] leading-relaxed text-ink-2">
+          开发 fframes 本身的 agent 应从
+          <a
+            href={`${site.repo}/blob/main/AGENTS.md`}
+            target="_blank"
+            rel="noreferrer noopener"
+            class="link inline-flex items-center gap-1 text-ink"
+          >
+            AGENTS.md
+            <Icon name="ph:arrow-up-right" class="h-3 w-3 opacity-60" aria-hidden="true" />
+          </a>
+          开始。对人类开发者，请先装上 just 命令运行器，再初始化仓库。
+        </p>
+        <p class="mt-4 max-w-[46ch] text-[15px] leading-relaxed text-ink-2">
+          最后一行的 just watch-editor 需要在另一个终端里运行，它负责开发编辑器本身。
+        </p>
+      </SectionHead>
+    </div>
+
+    <div class="reveal min-w-0 md:col-span-7" style="--d: 6%">
+      <Prompt lines={[...contributionSteps]} />
+      <p class="mt-4 pl-3 text-[14.5px] leading-relaxed text-ink-2">
+        fframes 以
+        <a href={site.license} target="_blank" rel="noreferrer noopener" class="link text-ink">
+          MIT 许可证</a
+        > 发布。
+      </p>
+    </div>
+  </div>
+</Section>

@@ -1,0 +1,73 @@
+---
+import { Icon } from 'astro-icon/components';
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { commandNotes, commands, type CommandSpan, type CommandTint } from '../../data/site';
+
+const spanClass: Record<CommandSpan, string> = {
+  full: 'sm:col-span-2 lg:col-span-12',
+  half: 'sm:col-span-1 lg:col-span-6',
+};
+
+const tintClass: Record<CommandTint, string> = {
+  surface: 'bg-surface hover:bg-surface-2',
+  raised: 'bg-surface-3 hover:bg-surface-2',
+  accent: 'bg-accent-soft',
+};
+---
+
+<Section id="commands">
+  <SectionHead
+    title="每条命令都会给出可读的结果"
+    lead="它们把视频变成 agent 能读的东西：PNG、文本和数字，而不是一个需要人眼盯着的播放器。"
+  />
+
+  <ul
+    class="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-card border border-line bg-line sm:grid-cols-2 lg:grid-cols-12"
+  >
+    {
+      commands.map((entry, index) => (
+        <li
+          class:list={[
+            'reveal p-5',
+            spanClass[entry.span],
+            tintClass[entry.tint],
+            entry.span === 'full' ? 'sm:grid sm:grid-cols-2 sm:gap-8' : 'flex flex-col gap-2.5',
+          ]}
+          style={`--d: ${(index % 3) * 5}%`}
+        >
+          <code
+            class:list={[
+              'font-mono text-[12.5px] leading-relaxed break-words',
+              entry.tint === 'accent' ? 'text-accent-ink' : 'text-ink',
+            ]}
+          >
+            {entry.command}
+          </code>
+          <p
+            class:list={[
+              'text-[14.5px] leading-relaxed text-ink-2',
+              entry.span === 'full' ? 'mt-2.5 sm:mt-0' : '',
+            ]}
+          >
+            {entry.output}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="mt-7 flex max-w-[76ch] flex-col gap-3">
+    {
+      commandNotes.map((note, index) => (
+        <p
+          class="reveal flex gap-2.5 text-[14.5px] leading-relaxed text-ink-2"
+          style={`--d: ${index * 4}%`}
+        >
+          <Icon name="ph:info" class="mt-1 h-4 w-4 shrink-0 text-ink-3" aria-hidden="true" />
+          <span>{note}</span>
+        </p>
+      ))
+    }
+  </div>
+</Section>

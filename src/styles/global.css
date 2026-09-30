@@ -1,0 +1,514 @@
+@import 'tailwindcss';
+
+/* Theme is driven by [data-theme] so the manual toggle and the system
+   preference resolve to the exact same cascade. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* ------------------------------------------------------------------ *
+ * Brand tokens. Values are lifted from the fframes project itself.
+ * One accent (burnt orange), one ink, one radius scale. Locked.
+ * ------------------------------------------------------------------ */
+:root {
+  --surface: #ffffff;
+  --surface-2: #f9f9f9;
+  --surface-3: #f2f1ef;
+  --text: #0d0d0d;
+  --text-2: #5d5d5d;
+  --text-3: #6f6c67;
+  --line: rgb(13 13 13 / 0.11);
+  --line-soft: rgb(13 13 13 / 0.055);
+  /* Interactive controls need a boundary that clears 3:1, not a hairline. */
+  --control-line: rgb(13 13 13 / 0.47);
+  --ghost: rgb(13 13 13 / 0.06);
+  --ghost-strong: rgb(13 13 13 / 0.1);
+  --primary: #181818;
+  --primary-fg: #ffffff;
+  --primary-hover: #2d2d2d;
+  --accent: #fb6a22;
+  /* Brand orange is 2.9:1 on white, so accent coloured text gets its own
+     darker step. Fills, rules and tints keep the brand value. */
+  --accent-ink: #b8420a;
+  --accent-soft: rgb(251 106 34 / 0.12);
+  --accent-line: rgb(251 106 34 / 0.38);
+  --ring: #0169cc;
+
+  /* The terminal panel is dark in both themes, exactly as the project ships it. */
+  --code: #181818;
+  --code-fg: #ededed;
+  --code-muted: #9a9a9a;
+  --code-line: rgb(255 255 255 / 0.12);
+
+  --sheet-line: rgb(13 13 13 / 0.05);
+  --sheet-line-outer: rgb(13 13 13 / 0.06);
+  --crop-mark: rgb(13 13 13 / 0.14);
+  --grain-opacity: 0.06;
+  --leak: 0.16;
+  --wordmark: url('/brand/fframes-wordmark.svg');
+  --wordmark-fade: #e3e3e3;
+  --gutter: 1.5rem;
+  --max: 1280px;
+}
+
+[data-theme='dark'] {
+  --surface: #121211;
+  --surface-2: #1b1b1a;
+  --surface-3: #242422;
+  --text: #f2f1ef;
+  --text-2: #a9a7a2;
+  --text-3: #8a8781;
+  --line: rgb(242 241 239 / 0.14);
+  --line-soft: rgb(242 241 239 / 0.07);
+  --control-line: rgb(242 241 239 / 0.4);
+  --ghost: rgb(242 241 239 / 0.08);
+  --ghost-strong: rgb(242 241 239 / 0.14);
+  --primary: #f2f1ef;
+  --primary-fg: #131312;
+  --primary-hover: #ffffff;
+  --accent: #fb6a22;
+  --accent-ink: #fb6a22;
+  --accent-soft: rgb(251 106 34 / 0.16);
+  --accent-line: rgb(251 106 34 / 0.5);
+  --ring: #0285ff;
+
+  --code: #1e1e1c;
+  --code-fg: #ededed;
+  --code-muted: #9d9b96;
+  --code-line: rgb(255 255 255 / 0.14);
+
+  --sheet-line: rgb(242 241 239 / 0.045);
+  --sheet-line-outer: rgb(242 241 239 / 0.055);
+  --crop-mark: rgb(242 241 239 / 0.13);
+  --grain-opacity: 0.05;
+  --leak: 0.2;
+  --wordmark: url('/brand/fframes-wordmark-dark.svg');
+  --wordmark-fade: #4a4a48;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --gutter: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 3rem;
+  }
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--text);
+  --color-ink-2: var(--text-2);
+  --color-ink-3: var(--text-3);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+  --color-control-line: var(--control-line);
+  --color-ghost: var(--ghost);
+  --color-ghost-strong: var(--ghost-strong);
+  --color-invert: var(--primary);
+  --color-invert-fg: var(--primary-fg);
+  --color-invert-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-ring: var(--ring);
+  --color-code: var(--code);
+  --color-code-fg: var(--code-fg);
+  --color-code-muted: var(--code-muted);
+
+  --radius-tile: 8px;
+  --radius-panel: 12px;
+  --radius-card: 16px;
+
+  --font-sans:
+    'Geist Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Noto Sans SC', 'Source Han Sans SC', sans-serif;
+  --font-mono:
+    'Geist Mono Variable', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
+    monospace;
+}
+
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    /* The sticky header is the only thing scroll padding has to clear. */
+    scroll-padding-top: 84px;
+  }
+
+  @media (max-width: 1023px) {
+    html {
+      scroll-padding-top: 112px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--text);
+    background-color: var(--surface);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: -0.021em;
+    line-height: 1.14;
+    text-wrap: balance;
+  }
+
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: var(--line);
+    text-underline-offset: 3px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background: var(--accent-ink);
+    color: #ffffff;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+    font-feature-settings: 'calt' 0;
+  }
+
+  /* Shiki writes the palette onto the element, so let the panel own the surface. */
+  .astro-code {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    font-size: 0.8125rem;
+    line-height: 1.75;
+    font-weight: 400;
+    tab-size: 2;
+  }
+
+  /* CJK breaks between characters, latin only inside a word. `anywhere` would
+     also shrink min-content widths and tear Latin words apart, so it stays off. */
+  :where(h1, h2, h3, p, li) {
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: var(--max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* The 12 column layout sheet. It carries the grid the content sits on,
+     so it is structure, not ornament. */
+  .sheet {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    padding-inline: var(--gutter);
+    mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / 0.4) 62%, transparent 100%);
+  }
+
+  .sheet > div {
+    position: relative;
+    width: 100%;
+    max-width: calc(var(--max) - 2 * var(--gutter));
+    height: 100%;
+    border-inline: 1px solid var(--sheet-line-outer);
+    background-image: linear-gradient(to right, var(--sheet-line) 1px, transparent 1px);
+    background-size: 25% 100%;
+  }
+
+  @media (min-width: 900px) {
+    .sheet > div {
+      background-size: calc(100% / 12) 100%;
+    }
+  }
+
+  /* Crop marks on the column lines, the way a frame is registered for print. */
+  .sheet svg {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .leak {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 780px;
+    z-index: -2;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .leak::before,
+  .leak::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    animation: leak-drift 20s ease-in-out infinite alternate;
+  }
+
+  .leak::before {
+    top: -360px;
+    right: -140px;
+    width: 760px;
+    height: 520px;
+    background: radial-gradient(closest-side, rgb(251 106 34 / var(--leak)), rgb(251 106 34 / 0));
+  }
+
+  .leak::after {
+    top: -300px;
+    right: 34%;
+    width: 540px;
+    height: 420px;
+    background: radial-gradient(closest-side, rgb(255 102 173 / calc(var(--leak) * 0.4)), rgb(255 102 173 / 0));
+    animation-delay: -10s;
+  }
+
+  @keyframes leak-drift {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(-64px, 26px, 0) scale(1.08);
+    }
+  }
+
+  /* Grain is fixed and non interactive, so it never repaints a scroll container. */
+  .grain {
+    position: fixed;
+    inset: -50%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 2.6 -1.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain-flicker 900ms steps(6) infinite;
+  }
+
+  @keyframes grain-flicker {
+    0% {
+      transform: translate(0, 0);
+    }
+    20% {
+      transform: translate(-3%, 2%);
+    }
+    40% {
+      transform: translate(2%, -4%);
+    }
+    60% {
+      transform: translate(-4%, -1%);
+    }
+    80% {
+      transform: translate(3%, 3%);
+    }
+    100% {
+      transform: translate(-1%, 4%);
+    }
+  }
+
+  /* 48px rule, the brand's section marker. */
+  .rule {
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+  }
+
+  .link {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: color 150ms ease;
+  }
+
+  .link:hover {
+    color: var(--accent-ink);
+  }
+
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--text-2);
+  }
+
+  /* Horizontally scrollable strips fade out instead of ending on a hard cut. */
+  .scroll-fade {
+    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 2.5rem), transparent 100%);
+  }
+
+  @media (min-width: 1024px) {
+    .scroll-fade {
+      mask-image: none;
+    }
+  }
+}
+
+/* Registered so a stagger can only ever be a valid range or time value.
+   A wrong unit, say `--d: 140ms` on a scroll reveal, is rejected by type
+   checking and falls back to the initial value instead of silently dropping
+   the whole `animation-range` declaration and leaving content stuck at a
+   partial opacity. */
+@property --d {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 0%;
+}
+
+@property --t {
+  syntax: '<time>';
+  inherits: false;
+  initial-value: 0s;
+}
+
+@layer utilities {
+  /* Hero entry. Transform and opacity only. */
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .rise {
+    animation: rise-in 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--t, 0s);
+  }
+
+  /* The headline is the LCP element, so it moves without ever reaching
+     opacity 0. Painting it immediately keeps the largest paint honest. */
+  @keyframes rise-y {
+    from {
+      transform: translate3d(0, 26px, 0);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  .rise-y {
+    animation: rise-y 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--t, 0s);
+  }
+
+  /* Scroll driven reveal. Where view() timelines are unsupported the
+     animation has no duration, so content simply starts visible. */
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 22px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: sheet-in linear both;
+        animation-timeline: view();
+        /* Both endpoints on `entry`, never mixed with `cover`: `entry 100%`
+           means "fully in view" for every element height, so the fade always
+           completes while the content is readable. */
+        animation-range: entry 8% entry calc(50% + var(--d, 0%));
+      }
+    }
+  }
+
+  /* The brand's underline sweep, rebuilt on a transform so it stays cheap. */
+  .sweep {
+    background-image: linear-gradient(90deg, var(--accent), var(--accent));
+    background-repeat: no-repeat;
+    background-position: 0 96%;
+    background-size: 0% 0.075em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sweep {
+      animation: sweep-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) 420ms forwards;
+    }
+  }
+
+  @keyframes sweep-in {
+    to {
+      background-size: 100% 0.075em;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain,
+  .leak::before,
+  .leak::after,
+  .rise,
+  .rise-y,
+  .reveal {
+    animation: none !important;
+  }
+
+  .sweep {
+    background-size: 100% 0.075em;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

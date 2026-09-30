@@ -1,0 +1,62 @@
+---
+import CodeBlock from '../CodeBlock.astro';
+import Section from '../Section.astro';
+import SectionHead from '../SectionHead.astro';
+import { site } from '../../data/site';
+
+const code = `impl Video for HelloWorldVideo<'_> {
+    const FPS: usize = 30;
+    const WIDTH: usize = 1920;
+    const HEIGHT: usize = 1080;
+
+    fn render_frame(&self, frame: Frame, ctx: &FFramesContext) -> fframes::Svgr<'_> {
+        fframes::svgr!(
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"
+                 width={ctx.current_video_size.width}
+                 height={ctx.current_video_size.height}>
+                <rect x="400" y="400" width="200" height="200" fill="blue"
+                    transform={frame.animate(fframes::timeline!(
+                        at 0.,  animate Transform::translate(0, 0) => Transform::translate(200, 480),  Easing::Linear,
+                        at 2. => 6.0,  animate Transform::translate(200, 480) => Transform::translate(750, -400), Easing::Linear,
+                        at 6.0 => 10.0, animate Transform::translate(750, -400) => Transform::translate(1310, 480), Easing::Linear,
+                    ))}
+                />
+                <text x="100" y="440" font-family="JetBrains Mono" font-size="74" fill="#3b5563">
+                    {format!("This frame index: {}, second: {:.2}", frame.index, frame.seconds())}
+                </text>
+            </svg>
+        )
+    }
+}`;
+---
+
+<Section id="code">
+  <SectionHead
+    title="你的 agent 写什么"
+    lead="每一帧都是一个由 Rust 函数返回的 SVG 树，用 svgr! 宏写。下面这段来自 examples/hello-world 的源码，有删节：一个方块沿时间轴运动，一行文字打印当前帧。"
+    class="max-w-[76ch]"
+  />
+
+  <div class="reveal mt-10">
+    <CodeBlock code={code} lang="rust" wrap={false} />
+  </div>
+
+  <div class="mt-6 grid gap-6 md:grid-cols-2 md:gap-12">
+    <p class="reveal max-w-[52ch] text-[15px] leading-relaxed text-ink-2">
+      时间轴就写在 <code class="font-mono text-[0.92em] text-ink">timeline!</code>
+      {' '}里：at 给出秒数，animate 给出起止变换，Easing 给出曲线。不需要打开浏览器去拖关键帧。
+    </p>
+    <p class="reveal max-w-[52ch] text-[15px] leading-relaxed text-ink-2" style="--d: 5%">
+      {'完整的 API 参考在 '}
+      <a href={site.docs} target="_blank" rel="noreferrer noopener" class="link text-ink">
+        docs.rs/fframes
+      </a>
+      ，skill 里的 <a
+        href={`${site.repo}/blob/main/skills/fframes-video/references/api.md`}
+        target="_blank"
+        rel="noreferrer noopener"
+        class="link text-ink">API 速查表</a
+      >是它的压缩版。
+    </p>
+  </div>
+</Section>
